@@ -354,7 +354,38 @@ def obr(command):
     elif settings_flag:
         print(settings_flag, 'obr')
         vals = flag, settings_flag, settings_counter, counter, words
-        return settings(command, end_session)
+        flag, settings_flag, settings_counter, counter, words = tuple(vals)
+        if settings_counter == 0:
+            response_text = f'Сколько времени будем выделять на один раунд?'
+        elif settings_counter == 1:
+            if set(command).union(set('1234567890')) != 10:
+                response_text = 'Сколько ещё комманд будет играть?'
+                time = int(command)
+            else:
+                response_text = 'Введите цифры, пожалуйста'
+                return response_text, end_session
+        elif settings_counter == 2:
+            if set(command).union(set('1234567890')) != 10:
+                response_text = 'Как называется ваша команда?'
+                num_of_teams = int(command)
+            else:
+                response_text = 'Введите цифры, пожалуйста'
+                vals = flag, settings_flag, settings_counter, counter, words
+                return response_text, end_session
+        elif settings_counter == 3:
+            name = command
+            if num_of_teams == 1:
+                response_text = 'Скажите, кто начнёт игру?'
+            else:
+                response_text = 'Я начинаю'
+                settings_flag = False
+            vals = flag, settings_flag, settings_counter, counter, words
+        else:
+            response_text = 'Отлично, давайте начнём'
+            settings_flag = False
+        settings_counter += 1
+        vals = flag, settings_flag, settings_counter, counter, words
+        return response_text, end_session
 
     elif str(words[counter]).lower() == str(command).lower():
         response_text = f'Вы угадали - это {words[counter]}'
@@ -389,38 +420,4 @@ def obr(command):
     return response_text, end_session
 
 
-def settings(command, end_session):
-    global vals, time, num_of_teams, name
-    flag, settings_flag, settings_counter, counter, words = tuple(vals)
-    if settings_counter == 0:
-        response_text = f'Сколько времени будем выделять на один раунд?'
-    elif settings_counter == 1:
-        if set(command).union(set('1234567890')) != 10:
-            response_text = 'Сколько ещё комманд будет играть?'
-            time = int(command)
-        else:
-            response_text = 'Введите цифры, пожалуйста'
-            return response_text, end_session
-    elif settings_counter == 2:
-        if set(command).union(set('1234567890')) != 10:
-            response_text = 'Как называется ваша команда?'
-            num_of_teams = int(command)
-        else:
-            response_text = 'Введите цифры, пожалуйста'
-            vals = flag, settings_flag, settings_counter, counter, words
-            return response_text, end_session
-    elif settings_counter == 3:
-        name = command
-        if num_of_teams == 1:
-            response_text = 'Скажите, кто начнёт игру?'
-        else:
-            response_text = 'Я начинаю'
-            settings_flag = False
-        vals = flag, settings_flag, settings_counter, counter, words
-    else:
-        response_text = 'Отлично, давайте начнём'
-        settings_flag = False
-    settings_counter += 1
-    vals = flag, settings_flag, settings_counter, counter, words
-    return response_text, end_session
 
