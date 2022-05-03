@@ -338,7 +338,7 @@ def respond():
     return response
 
 def obr(command):
-    global vals
+    global vals, num_of_teams
     flag, settings_flag, settings_counter, counter, words = tuple(vals)
     end_session = False
 
